@@ -1,0 +1,45 @@
+# ============================================================
+# Docker Ignore - Exclude unnecessary files from Docker build
+# ============================================================
+
+# Git
+.git
+.gitignore
+
+# Python
+__pycache__
+*.py[cod]
+*.egg-info
+.pytest_cache
+.coverage
+htmlcov/
+.mypy_cache
+
+# Virtual environments
+venv/
+.venv/
+env/
+
+# IDE
+.vscode/
+.idea/
+
+# Environment files (secrets!)
+.env
+.env.*
+!.env.example
+
+# Documentation (not needed in container)
+docs/
+README.md
+TODO.md
+
+# Tests (not needed in production container)
+tests/
+
+# Docker
+docker-compose*.yml
+Dockerfile
+
+# Nginx config
+nginx/

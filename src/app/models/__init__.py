@@ -1,21 +1,52 @@
 """
-Models Package - SQLAlchemy ORM Models
+Database ORM Models Registry
 
-Ref: Database Design §2, Tech Stack §1.2
-Contains all database table definitions using SQLAlchemy 2.0 async.
+Centralized import for all SQLAlchemy 2.0 ORM models, ensuring they are loaded
+prior to Alembic or standard `Base.metadata.create_all()` calls.
 
-Tables (Task 7-8):
-  - users
-  - relationship_types
-  - contacts
-  - user_global_style_profile
-  - contact_style_profile
-  - conversations
-  - messages
-  - message_embeddings
-  - conversation_summaries
-  - agent_state
-  - feedback_corrections
-  - audit_logs
-  - system_logs
+Ref: Database Design §2 - Logical Schema Design
 """
+
+from .base import Base, UUIDPrimaryKeyMixin, TimestampMixin, SoftDeleteMixin
+from .users import User
+from .contacts import Contact, RelationshipType
+
+from .ai_profiles import (
+    UserGlobalStyleProfile,
+    ContactStyleProfile,
+    AgentState
+)
+
+from .messaging import (
+    Conversation,
+    ConversationSummary,
+    Message,
+    MessageEmbedding
+)
+
+from .operational import (
+    FeedbackCorrection,
+    AuditLog,
+    SystemConfig
+)
+
+# Explicitly exposing for external module usage
+__all__ = [
+    "Base",
+    "UUIDPrimaryKeyMixin",
+    "TimestampMixin",
+    "SoftDeleteMixin",
+    "User",
+    "Contact",
+    "RelationshipType",
+    "UserGlobalStyleProfile",
+    "ContactStyleProfile",
+    "AgentState",
+    "Conversation",
+    "ConversationSummary",
+    "Message",
+    "MessageEmbedding",
+    "FeedbackCorrection",
+    "AuditLog",
+    "SystemConfig"
+]

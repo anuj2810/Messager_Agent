@@ -1,0 +1,82 @@
+# ============================================================
+# AI Messenger Agent - Docker Compose (Development)
+# ============================================================
+# Ref: Architecture §9 - FastAPI + PostgreSQL + Nginx
+# Ref: Tech Stack §2.2 - EC2 + Docker for MVP
+# ============================================================
+
+services:
+  # --- FastAPI Application ---
+  # Ref: Architecture §9 - Container 1: FastAPI App
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: messenger-agent-app
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - messenger-network
+    healthcheck:
+      test: [ "CMD", "python", "-c", "import httpx; httpx.get('http://localhost:8000/health')" ]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
+  # --- PostgreSQL Database ---
+  # Ref: Architecture §9 - Container 2: PostgreSQL
+  # Ref: Database Design §1 - PostgreSQL 15+
+  db:
+    image: pgvector/pgvector:pg16
+    container_name: messenger-agent-db
+    restart: unless-stopped
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: messenger_agent
+    command: postgres -c shared_buffers=256MB -c work_mem=16MB -c maintenance_work_mem=256MB -c random_page_cost=1.1 -c statement_timeout=5000 -c lock_timeout=2000
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./initdb:/docker-entrypoint-initdb.d:ro
+    networks:
+      - messenger-network
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  # --- Nginx Reverse Proxy ---
+  # Ref: Architecture §9 - Nginx: TLS termination, rate limiting, reverse proxy
+  nginx:
+    image: nginx:alpine
+    container_name: messenger-agent-nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      app:
+        condition: service_healthy
+    networks:
+      - messenger-network
+
+volumes:
+  postgres_data:
+    driver: local
+
+networks:
+  messenger-network:
+    driver: bridge

@@ -14,6 +14,7 @@ After completing EVERY task:
    - Key concepts explained like a **best teacher** in **Hindi + English (Hinglish)** style
 4. The file should help a student understand and learn what was done
 5. **NEVER skip this step. It is mandatory for every task.**
+6. Also **update `README.md`** in the root folder to reflect current project progress.
 
 ---
 
@@ -28,15 +29,15 @@ After completing EVERY task:
 ## Phase 2 – Environment & Foundation Setup
 - [x] Task 1: Python project initialization (Poetry, pyproject.toml)
 - [x] Task 2: FastAPI application skeleton with layered architecture
-- [ ] Task 3: Environment configuration (.env.example, pydantic-settings)
-- [ ] Task 4: Docker & Docker Compose setup
-- [ ] Task 5: Nginx reverse proxy configuration
+- [x] Task 3: Environment configuration (.env.example, pydantic-settings)
+- [x] Task 4: Docker & Docker Compose setup
+- [x] Task 5: Nginx reverse proxy configuration
 
 ---
 
 ## Phase 3 – Database Implementation
-- [ ] Task 6: PostgreSQL setup via Docker Compose
-- [ ] Task 7: SQLAlchemy models + Alembic migration setup
+- [x] Task 6: PostgreSQL setup via Docker Compose
+- [x] Task 7: SQLAlchemy models + Alembic migration setup
 - [ ] Task 8: Create all database tables (initial migration)
 - [ ] Task 9: Database indexes and constraints
 - [ ] Task 10: Repository layer implementation
